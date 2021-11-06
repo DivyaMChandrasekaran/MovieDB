@@ -4,6 +4,7 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [Improvements](#improvements)
 
 ## General info
 This project contains REST APIs for a Movie Database where 
@@ -64,3 +65,6 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 $ python manage.py runserver
 ```
+
+## Improvements
+* Rate API Limit can be implemented to limit the API calls
