@@ -18,6 +18,5 @@ class Movies(models.Model):
     reviews = models.ManyToManyField(MovieReview, blank=False, default="")
     created_time = models.DateTimeField(auto_now_add=True, null=True)
     modified_time = models.DateTimeField(auto_now=True, null=True)
-
-    class Meta:
-        ordering = ['up_votes', 'down_votes', 'release_date']
+    ordering_fields=['up_votes', 'down_votes', 'release_date']
+        
