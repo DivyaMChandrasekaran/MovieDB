@@ -4,8 +4,8 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import JsonResponse
-from django.db.models import F
 from rest_framework import status
+from rest_framework.filters import OrderingFilter
 
 from .models import MovieReview, Movies
 from .serializers import MovieSerializer, MovieListSerializer
@@ -20,6 +20,8 @@ class MoviesList(mixins.ListModelMixin,
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Movies.objects.all()
     serializer_class = MovieListSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['up_votes', 'down_votes', 'release_date']
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
