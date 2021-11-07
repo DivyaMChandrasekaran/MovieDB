@@ -1,11 +1,17 @@
 from rest_framework import serializers
-from .models import Movies, GENRES
+from .models import MovieReview, Movies, GENRES
 
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieReview
+        fields = '__all__'
 
 class MovieSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True)
+
     class Meta:
         model = Movies
-        fields = ['name', 'genre', 'release_date', 'up_votes', 'down_votes', 'reviews']
+        fields = '__all__'
 
 
     def update(self, instance, validated_data):
@@ -16,16 +22,26 @@ class MovieSerializer(serializers.ModelSerializer):
                 instance.up_votes += 1
         if(validated_data.get('down_votes')):
                 instance.down_votes -= 1
-        instance.reviews = validated_data.get('reviews', instance.reviews)
+        if(validated_data.get('reviews')):
+                instance.reviews.add(MovieReview.objects.create(review=validated_data.get('reviews')[0]['review']))
         instance.save()
         return instance
 
 
 
 class MovieListSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True)
+
     class Meta:
         model = Movies
-        fields = ['name']
+        fields = '__all__'
 
     def create(self, validated_data):
-        return Movies.objects.create(**validated_data)
+        reviews = validated_data.pop('reviews')
+        movie = Movies.objects.create(**validated_data)
+        moviereview = MovieReview.objects.create(review=reviews[0]['review'])
+        movie.reviews.add(moviereview)  
+        return movie
+
+    def list(self):
+        return Movies.objects.values_list('name')
