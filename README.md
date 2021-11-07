@@ -12,6 +12,7 @@ This project contains REST APIs for a Movie Database where
 and filter the results by votes, genre
 * Registered/Authenticated users should be able to add movies, upvote/downVote
 movies, set favourite genre and get recommendations based on favourite genre.
+* Authentication is done using JWT.
 	
 ## Technologies
 Project is created with:
